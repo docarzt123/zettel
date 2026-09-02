@@ -1,0 +1,11 @@
+"pin" = "Pin";
+"pin.tooltip" = "Pin: keep open as a floating window";
+"saveas" = "Save As…";
+"saveas.title" = "Save a copy of the note";
+"menu.open" = "Open Zettel\t⌃⌥Z";
+"menu.reveal" = "Show File in Finder";
+"menu.login" = "Launch at Login";
+"menu.about" = "About Zettel";
+"menu.quit" = "Quit Zettel";
+"about.text" = "A text field in your menu bar.\n\nThe text is saved automatically to:\n%@\n\nShortcut: ⌃⌥Z opens and closes it.";
+"about.github" = "View on GitHub";

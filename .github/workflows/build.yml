@@ -1,0 +1,83 @@
+name: Build & Release
+
+# - Push auf main / Pull Request: nur kompilieren (Ad-hoc-Signatur), kein Upload.
+# - Tag vX.Y.Z oder manueller Start: signieren, notarisieren, DMG ans Release hängen.
+#
+# Nötige Secrets für signierte Releases (Settings → Secrets → Actions):
+#   MACOS_CERT_P12_BASE64, MACOS_CERT_PASSWORD  → Developer-ID-Zertifikat
+#   APPLE_ID, APPLE_APP_PASSWORD, APPLE_TEAM_ID → Notarisierung
+# Ohne sie läuft der Build trotzdem durch, nur unsigniert.
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build macOS
+    runs-on: macos-14
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Signing-Zertifikat importieren (nur bei Release)
+        if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
+        env:
+          MACOS_CERT_P12_BASE64: ${{ secrets.MACOS_CERT_P12_BASE64 }}
+          MACOS_CERT_PASSWORD: ${{ secrets.MACOS_CERT_PASSWORD }}
+        run: |
+          if [ -z "${MACOS_CERT_P12_BASE64:-}" ]; then
+            echo "ℹ️ Keine Signing-Secrets → Ad-hoc"; exit 0
+          fi
+          KEYCHAIN="$RUNNER_TEMP/signing.keychain-db"
+          KPW="$(openssl rand -base64 24)"
+          security create-keychain -p "$KPW" "$KEYCHAIN"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN"
+          security unlock-keychain -p "$KPW" "$KEYCHAIN"
+          echo "$MACOS_CERT_P12_BASE64" | base64 --decode > "$RUNNER_TEMP/cert.p12"
+          security import "$RUNNER_TEMP/cert.p12" -k "$KEYCHAIN" -P "$MACOS_CERT_PASSWORD" -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KPW" "$KEYCHAIN" >/dev/null
+          security list-keychains -d user -s "$KEYCHAIN" $(security list-keychains -d user | sed 's/[”"]//g')
+          IDENT="$(security find-identity -v -p codesigning "$KEYCHAIN" | grep 'Developer ID Application' | head -1 | sed -E 's/.*"(.*)".*/\1/')"
+          [ -n "$IDENT" ] || { echo "::error::Keine Developer-ID-Identität im .p12"; exit 1; }
+          echo "MACOS_SIGN_IDENTITY=$IDENT" >> "$GITHUB_ENV"
+
+      - name: Build
+        run: ./build.sh --no-install
+
+      - name: DMG
+        if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
+        run: |
+          brew install create-dmg || true
+          bash scripts/build_dmg.sh
+
+      - name: Notarisieren
+        if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_PASSWORD: ${{ secrets.APPLE_APP_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: bash scripts/macos_notarize.sh dist/Zettel.dmg
+
+      - name: Artefakt (manueller Lauf)
+        if: github.event_name == 'workflow_dispatch'
+        uses: actions/upload-artifact@v4
+        with:
+          name: Zettel-dmg
+          path: dist/Zettel.dmg
+          retention-days: 3
+
+      - name: GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/Zettel.dmg
+          generate_release_notes: true
