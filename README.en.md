@@ -37,8 +37,8 @@ Requires macOS 13 (Ventura) or newer.
 
 | Action | How |
 |---|---|
-| Open and close | Click the menu bar icon or press `⌃⌥Z` (Control + Option + Z) from anywhere |
-| Close | Click anywhere else, press `Esc`, or press `⌃⌥Z` again |
+| Open and close | Click the menu bar icon or press `⌃⌥Y` (Control + Option + Y) from anywhere |
+| Close | Click anywhere else, press `Esc`, or press `⌃⌥Y` again |
 | Pin | Pin icon at the bottom left. The field becomes a small window floating above all other apps, including full-screen ones. Click again to unpin. |
 | Resize | Drag the edge. The size is remembered, both for the popover and the pinned window. |
 | Clear | "Clear" at the bottom right deletes everything. `⌘Z` brings the text back. |

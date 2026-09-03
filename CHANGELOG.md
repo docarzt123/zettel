@@ -27,10 +27,10 @@ Deutsch zuerst, English below each entry.
   an jeder freien Fläche packen und verschieben.
   When pinning, the window stays where the popover was and can be dragged
   by any empty area.
-- Globales Tastenkürzel `⌃⌥Z` zum Öffnen und Schließen, `Esc` schließt.
-  Die Z-Taste wird aus dem aktiven Tastaturlayout ermittelt (deutsch: Z, nicht Y).
-  Global hotkey `⌃⌥Z` to open and close, `Esc` closes. The Z key is
-  resolved from the active keyboard layout (German: Z, not Y).
+- Globales Tastenkürzel `⌃⌥Y` zum Öffnen und Schließen, `Esc` schließt.
+  Die Y-Taste wird aus dem aktiven Tastaturlayout ermittelt (deutsch wie US).
+  Global hotkey `⌃⌥Y` to open and close, `Esc` closes. The Y key is
+  resolved from the active keyboard layout (German and US alike).
 - Größe per Ziehen änderbar und gemerkt.
   Resizable by dragging, size remembered.
 - „Speichern unter …" exportiert eine Kopie als Textdatei.

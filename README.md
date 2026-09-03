@@ -38,8 +38,8 @@ Mindestens macOS 13 (Ventura).
 
 | Aktion | Wie |
 |---|---|
-| Öffnen und schließen | Klick auf das Symbol in der Menüleiste oder `⌃⌥Z` (Control + Option + Z), von überall |
-| Schließen | Klick irgendwo anders hin, `Esc`, oder nochmal `⌃⌥Z` |
+| Öffnen und schließen | Klick auf das Symbol in der Menüleiste oder `⌃⌥Y` (Control + Option + Y), von überall |
+| Schließen | Klick irgendwo anders hin, `Esc`, oder nochmal `⌃⌥Y` |
 | Anpinnen | Pin-Symbol unten links. Das Feld wird zu einem kleinen Fenster, das über allen anderen Apps schwebt, auch über Vollbild-Apps. Nochmal klicken hebt es auf. |
 | Größe ändern | Am Rand ziehen. Die Größe wird gemerkt, im Popover wie im angepinnten Fenster. |
 | Leeren | „Leeren" unten rechts löscht alles. Ein `⌘Z` holt den Text zurück. |

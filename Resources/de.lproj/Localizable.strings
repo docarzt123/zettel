@@ -4,10 +4,10 @@
 "clear.tooltip" = "Alles löschen (⌘Z macht es rückgängig)";
 "saveas" = "Speichern unter …";
 "saveas.title" = "Zettel als Kopie speichern";
-"menu.open" = "Zettel öffnen\t⌃⌥Z";
+"menu.open" = "Zettel öffnen\t⌃⌥Y";
 "menu.reveal" = "Datei im Finder zeigen";
 "menu.login" = "Bei Login starten";
 "menu.about" = "Über Zettel";
 "menu.quit" = "Zettel beenden";
-"about.text" = "Ein Textfeld in der Menüleiste.\n\nDer Text wird automatisch gespeichert in:\n%@\n\nTastenkürzel: ⌃⌥Z öffnet und schließt.";
+"about.text" = "Ein Textfeld in der Menüleiste.\n\nDer Text wird automatisch gespeichert in:\n%@\n\nTastenkürzel: ⌃⌥Y öffnet und schließt.";
 "about.github" = "Auf GitHub ansehen";

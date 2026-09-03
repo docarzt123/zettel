@@ -31,7 +31,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate, NSW
             let image = NSImage(systemSymbolName: "note.text", accessibilityDescription: "Zettel")
             image?.isTemplate = true
             button.image = image
-            button.toolTip = "Zettel (⌃⌥Z)"
+            button.toolTip = "Zettel (⌃⌥Y)"
             button.target = self
             button.action = #selector(statusItemClicked)
             button.sendAction(on: [.leftMouseUp, .rightMouseUp])
@@ -43,7 +43,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate, NSW
         store.startWatching()
 
         registerHotKey()
-        // Wechselt das Tastaturlayout (z. B. Deutsch ↔ US), wandert die Z-Taste.
+        // Wechselt das Tastaturlayout (z. B. Deutsch ↔ US), wandert die Y-Taste.
         DistributedNotificationCenter.default().addObserver(
             self, selector: #selector(registerHotKey),
             name: NSNotification.Name(kTISNotifySelectedKeyboardInputSourceChanged as String), object: nil)
@@ -52,10 +52,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate, NSW
         if zettelIsPinned { showPanel() }
     }
 
-    /// ⌃⌥Z, wobei „Z" die Taste ist, die im aktuellen Layout ein Z erzeugt.
+    /// ⌃⌥Y, wobei „Y" die Taste ist, die im aktuellen Layout ein Y erzeugt.
     @objc private func registerHotKey() {
         hotKey = nil
-        let code = HotKey.keyCode(for: "z", fallback: kVK_ANSI_Z)
+        let code = HotKey.keyCode(for: "y", fallback: kVK_ANSI_Y)
         hotKey = HotKey(keyCode: code, modifiers: controlKey | optionKey) { [weak self] in
             self?.toggle()
         }
