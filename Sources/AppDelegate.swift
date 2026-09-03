@@ -151,7 +151,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate, NSW
         controller.focusText()
     }
 
-    private func showPanel() {
+    /// Zeigt das angepinnte Fenster. `contentRect` (Bildschirmkoordinaten)
+    /// gibt die Position vor, z. B. die des gerade geschlossenen Popovers,
+    /// damit das Fenster beim Anpinnen an Ort und Stelle bleibt.
+    private func showPanel(at contentRect: NSRect? = nil) {
         popover?.performClose(nil)
         popover = nil
         if panel == nil {
@@ -165,19 +168,37 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate, NSW
             p.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
             p.isReleasedWhenClosed = false
             p.hidesOnDeactivate = false
+            p.isMovableByWindowBackground = true
             p.minSize = ZettelViewController.minSize
             p.delegate = self
-            if !p.setFrameUsingName("ZettelPanel") {
+            if contentRect == nil, !p.setFrameUsingName("ZettelPanel") {
                 p.center()
             }
-            p.setFrameAutosaveName("ZettelPanel")
             panel = p
         }
-        panel?.contentViewController = controller
-        panel?.makeKeyAndOrderFront(nil)
+        guard let panel else { return }
+        panel.contentViewController = controller
+        if let contentRect {
+            var frame = panel.frameRect(forContentRect: contentRect)
+            if let screen = NSScreen.screens.first(where: { $0.frame.intersects(contentRect) }) ?? NSScreen.main {
+                let vis = screen.visibleFrame
+                frame.origin.x = min(max(frame.origin.x, vis.minX), vis.maxX - frame.width)
+                frame.origin.y = min(max(frame.origin.y, vis.minY), vis.maxY - frame.height)
+            }
+            panel.setFrame(frame, display: false)
+        }
+        panel.setFrameAutosaveName("ZettelPanel")
+        panel.makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
         controller.focusText()
         controller.refreshPin()
+    }
+
+    /// Bildschirmposition des Textfelds, solange es noch im Popover sitzt.
+    private func currentContentRect() -> NSRect? {
+        guard let window = controller.view.window, popover?.isShown == true else { return nil }
+        let inWindow = controller.view.convert(controller.view.bounds, to: nil)
+        return window.convertToScreen(inWindow)
     }
 
     func zettelRequestClose() {
@@ -191,7 +212,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate, NSW
     func zettelTogglePin() {
         zettelIsPinned.toggle()
         if zettelIsPinned {
-            showPanel()
+            showPanel(at: currentContentRect())
         } else {
             showPopover()
         }

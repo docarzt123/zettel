@@ -23,6 +23,10 @@ Deutsch zuerst, English below each entry.
   Zustand bleibt über Neustarts erhalten.
   Pin button: popover becomes a floating window above all apps, state
   survives restarts.
+- Beim Anpinnen bleibt das Fenster an der Stelle des Popovers und lässt sich
+  an jeder freien Fläche packen und verschieben.
+  When pinning, the window stays where the popover was and can be dragged
+  by any empty area.
 - Globales Tastenkürzel `⌃⌥Z` zum Öffnen und Schließen, `Esc` schließt.
   Global hotkey `⌃⌥Z` to open and close, `Esc` closes.
 - Größe per Ziehen änderbar und gemerkt.
