@@ -35,6 +35,34 @@ final class HotKey {
         HotKey.registry[id] = nil
     }
 
+    /// Virtueller Keycode der Taste, die im aktuellen Tastaturlayout das
+    /// Zeichen `character` erzeugt. Nötig, weil Keycodes physische Tasten
+    /// bezeichnen: `kVK_ANSI_Z` ist auf einer deutschen Tastatur das Y.
+    static func keyCode(for character: Character, fallback: Int) -> Int {
+        guard let source = TISCopyCurrentKeyboardLayoutInputSource()?.takeRetainedValue(),
+              let ptr = TISGetInputSourceProperty(source, kTISPropertyUnicodeKeyLayoutData) else {
+            return fallback
+        }
+        let data = Unmanaged<CFData>.fromOpaque(ptr).takeUnretainedValue() as Data
+        let wanted = String(character).lowercased()
+        return data.withUnsafeBytes { raw -> Int in
+            guard let layout = raw.bindMemory(to: UCKeyboardLayout.self).baseAddress else { return fallback }
+            var deadKeys: UInt32 = 0
+            var chars = [UniChar](repeating: 0, count: 4)
+            var length = 0
+            for code in 0..<128 {
+                deadKeys = 0
+                let status = UCKeyTranslate(layout, UInt16(code), UInt16(kUCKeyActionDown), 0,
+                                            UInt32(LMGetKbdType()), UInt32(kUCKeyTranslateNoDeadKeysMask),
+                                            &deadKeys, chars.count, &length, &chars)
+                if status == noErr, length == 1, String(utf16CodeUnits: chars, count: 1).lowercased() == wanted {
+                    return code
+                }
+            }
+            return fallback
+        }
+    }
+
     private static func installHandlerIfNeeded() {
         guard !handlerInstalled else { return }
         handlerInstalled = true

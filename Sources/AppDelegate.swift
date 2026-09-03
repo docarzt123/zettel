@@ -42,12 +42,23 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate, NSW
         store.onExternalChange = { [weak self] text in self?.controller.applyExternal(text) }
         store.startWatching()
 
-        hotKey = HotKey(keyCode: kVK_ANSI_Z, modifiers: controlKey | optionKey) { [weak self] in
-            self?.toggle()
-        }
+        registerHotKey()
+        // Wechselt das Tastaturlayout (z. B. Deutsch ↔ US), wandert die Z-Taste.
+        DistributedNotificationCenter.default().addObserver(
+            self, selector: #selector(registerHotKey),
+            name: NSNotification.Name(kTISNotifySelectedKeyboardInputSourceChanged as String), object: nil)
 
         // Angepinntes Fenster nach Neustart wiederherstellen.
         if zettelIsPinned { showPanel() }
+    }
+
+    /// ⌃⌥Z, wobei „Z" die Taste ist, die im aktuellen Layout ein Z erzeugt.
+    @objc private func registerHotKey() {
+        hotKey = nil
+        let code = HotKey.keyCode(for: "z", fallback: kVK_ANSI_Z)
+        hotKey = HotKey(keyCode: code, modifiers: controlKey | optionKey) { [weak self] in
+            self?.toggle()
+        }
     }
 
     func applicationWillTerminate(_ notification: Notification) {
