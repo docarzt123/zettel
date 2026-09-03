@@ -1,5 +1,7 @@
 "pin" = "Anpinnen";
 "pin.tooltip" = "Anpinnen: als schwebendes Fenster offen halten";
+"clear" = "Leeren";
+"clear.tooltip" = "Alles löschen (⌘Z macht es rückgängig)";
 "saveas" = "Speichern unter …";
 "saveas.title" = "Zettel als Kopie speichern";
 "menu.open" = "Zettel öffnen\t⌃⌥Z";

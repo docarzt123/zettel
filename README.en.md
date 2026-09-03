@@ -41,6 +41,7 @@ Requires macOS 13 (Ventura) or newer.
 | Close | Click anywhere else, press `Esc`, or press `⌃⌥Z` again |
 | Pin | Pin icon at the bottom left. The field becomes a small window floating above all other apps, including full-screen ones. Click again to unpin. |
 | Resize | Drag the edge. The size is remembered, both for the popover and the pinned window. |
+| Clear | "Clear" at the bottom right deletes everything. `⌘Z` brings the text back. |
 | Save a copy | "Save As…" at the bottom right. The text stays in Zettel, the copy is a separate file. |
 | Right-click the icon | Open Zettel · Show File in Finder · Launch at Login · About Zettel · Quit |
 

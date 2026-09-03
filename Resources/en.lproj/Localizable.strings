@@ -1,5 +1,7 @@
 "pin" = "Pin";
 "pin.tooltip" = "Pin: keep open as a floating window";
+"clear" = "Clear";
+"clear.tooltip" = "Delete everything (⌘Z brings it back)";
 "saveas" = "Save As…";
 "saveas.title" = "Save a copy of the note";
 "menu.open" = "Open Zettel\t⌃⌥Z";

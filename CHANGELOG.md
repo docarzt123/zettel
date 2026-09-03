@@ -33,6 +33,8 @@ Deutsch zuerst, English below each entry.
   Resizable by dragging, size remembered.
 - „Speichern unter …" exportiert eine Kopie als Textdatei.
   "Save As…" exports a copy as a text file.
+- „Leeren" löscht den ganzen Text, ⌘Z holt ihn zurück.
+  "Clear" deletes all text, ⌘Z brings it back.
 - Rechtsklick-Menü: Öffnen, Datei im Finder zeigen, Bei Login starten,
   Über Zettel, Beenden.
   Context menu: Open, Show File in Finder, Launch at Login, About, Quit.

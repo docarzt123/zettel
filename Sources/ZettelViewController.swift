@@ -92,9 +92,17 @@ final class ZettelViewController: NSViewController, NSTextViewDelegate {
         saveAs.font = NSFont.systemFont(ofSize: NSFont.smallSystemFontSize)
         saveAs.translatesAutoresizingMaskIntoConstraints = false
 
+        let clear = NSButton(title: L("clear"), target: self, action: #selector(clearAll))
+        clear.bezelStyle = .rounded
+        clear.controlSize = .small
+        clear.font = NSFont.systemFont(ofSize: NSFont.smallSystemFontSize)
+        clear.toolTip = L("clear.tooltip")
+        clear.translatesAutoresizingMaskIntoConstraints = false
+
         let bar = NSView()
         bar.translatesAutoresizingMaskIntoConstraints = false
         bar.addSubview(pin)
+        bar.addSubview(clear)
         bar.addSubview(saveAs)
 
         root.addSubview(scroll)
@@ -118,6 +126,8 @@ final class ZettelViewController: NSViewController, NSTextViewDelegate {
             pin.centerYAnchor.constraint(equalTo: bar.centerYAnchor),
             saveAs.trailingAnchor.constraint(equalTo: bar.trailingAnchor, constant: -10),
             saveAs.centerYAnchor.constraint(equalTo: bar.centerYAnchor),
+            clear.trailingAnchor.constraint(equalTo: saveAs.leadingAnchor, constant: -8),
+            clear.centerYAnchor.constraint(equalTo: bar.centerYAnchor),
         ])
 
         view = root
@@ -190,6 +200,15 @@ final class ZettelViewController: NSViewController, NSTextViewDelegate {
         pinButton?.image = NSImage(systemSymbolName: pinned ? "pin.fill" : "pin",
                                    accessibilityDescription: L("pin"))
         pinButton?.contentTintColor = pinned ? .controlAccentColor : .secondaryLabelColor
+    }
+
+    /// Leert das Feld. Läuft über den Undo-Stapel, ⌘Z holt alles zurück.
+    @objc private func clearAll() {
+        let all = NSRange(location: 0, length: (textView.string as NSString).length)
+        guard all.length > 0, textView.shouldChangeText(in: all, replacementString: "") else { return }
+        textView.replaceCharacters(in: all, with: "")
+        textView.didChangeText()
+        focusText()
     }
 
     @objc private func saveAs() {

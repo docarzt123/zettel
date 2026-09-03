@@ -42,6 +42,7 @@ Mindestens macOS 13 (Ventura).
 | Schließen | Klick irgendwo anders hin, `Esc`, oder nochmal `⌃⌥Z` |
 | Anpinnen | Pin-Symbol unten links. Das Feld wird zu einem kleinen Fenster, das über allen anderen Apps schwebt, auch über Vollbild-Apps. Nochmal klicken hebt es auf. |
 | Größe ändern | Am Rand ziehen. Die Größe wird gemerkt, im Popover wie im angepinnten Fenster. |
+| Leeren | „Leeren" unten rechts löscht alles. Ein `⌘Z` holt den Text zurück. |
 | Kopie speichern | „Speichern unter …" unten rechts. Der Inhalt bleibt im Zettel stehen, die Kopie ist eine eigene Datei. |
 | Rechtsklick auf das Symbol | Zettel öffnen · Datei im Finder zeigen · Bei Login starten · Über Zettel · Beenden |
 

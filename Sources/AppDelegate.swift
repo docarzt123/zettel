@@ -171,9 +171,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate, NSW
             p.isMovableByWindowBackground = true
             p.minSize = ZettelViewController.minSize
             p.delegate = self
-            if contentRect == nil, !p.setFrameUsingName("ZettelPanel") {
+            // Autosave-Name ZUERST setzen: er holt die gemerkte Position zurück.
+            // Erst danach die gewünschte Position setzen, sonst überschreibt er sie.
+            if !p.setFrameUsingName("ZettelPanel") {
                 p.center()
             }
+            p.setFrameAutosaveName("ZettelPanel")
             panel = p
         }
         guard let panel else { return }
@@ -187,7 +190,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate, NSW
             }
             panel.setFrame(frame, display: false)
         }
-        panel.setFrameAutosaveName("ZettelPanel")
         panel.makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
         controller.focusText()
