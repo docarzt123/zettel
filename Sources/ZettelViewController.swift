@@ -33,6 +33,7 @@ final class ZettelViewController: NSViewController, NSTextViewDelegate {
     private let separators = LineSeparatorOverlay()
     private var lineRanges: [NSRange] = []
     private var layoutScheduled = false
+    private var mouseMonitor: Any?
 
     init(store: NoteStore) {
         self.store = store
@@ -156,6 +157,24 @@ final class ZettelViewController: NSViewController, NSTextViewDelegate {
         refreshPin()
         updateExclusion()
         scheduleLineButtonLayout()
+
+        // Solange das Textfeld den Fokus hat, bekommt ES die Mausbewegungen
+        // (nicht der Knopf darunter) und setzt jedes Mal den Text-Cursor.
+        // Deshalb: Bewegungen über einem Kopierknopf abfangen, Pfeil setzen
+        // und das Ereignis gar nicht erst ans Textfeld weiterreichen.
+        mouseMonitor = NSEvent.addLocalMonitorForEvents(matching: [.mouseMoved]) { [weak self] event in
+            guard let self, event.window === self.textView.window else { return event }
+            let p = self.textView.convert(event.locationInWindow, from: nil)
+            if self.lineButtons.contains(where: { !$0.isHidden && $0.frame.contains(p) }) {
+                NSCursor.arrow.set()
+                return nil
+            }
+            return event
+        }
+    }
+
+    deinit {
+        if let mouseMonitor { NSEvent.removeMonitor(mouseMonitor) }
     }
 
     private func smallButton(_ title: String, _ action: Selector, tooltip: String?) -> NSButton {
