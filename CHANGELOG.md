@@ -41,6 +41,8 @@ Deutsch zuerst, English below each entry.
   Ganz schwache Trennlinien unter den Zeilen zeigen, welcher Knopf wohin gehört.
   Copy button in front of every line, "Copy All" in the bottom bar. Very
   faint separator lines under the lines show which button belongs where.
+- Rotes X rechts hinter jeder Zeile löscht die Zeile, ⌘Z holt sie zurück.
+  Red X to the right of every line deletes it, ⌘Z brings it back.
 - Griff rechts unten zum Größerziehen, auch im Popover. Größe wird gemerkt.
   Resize grip at the bottom right, works in the popover too. Size is remembered.
 - Rückgängig und Wiederholen auch mit ⌃Z und ⌃⇧Z.

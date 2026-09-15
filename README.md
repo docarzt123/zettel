@@ -43,6 +43,7 @@ Mindestens macOS 13 (Ventura).
 | Anpinnen | Pin-Symbol unten links. Das Feld wird zu einem kleinen Fenster, das über allen anderen Apps schwebt, auch über Vollbild-Apps. Nochmal klicken hebt es auf. |
 | Größe ändern | Am Griff rechts unten ziehen. Das angepinnte Fenster geht auch an jeder Kante. Die Größe wird gemerkt. |
 | Zeile kopieren | Kopieren-Symbol links vor der Zeile. Kurz ein Haken, dann liegt die Zeile in der Zwischenablage. |
+| Zeile löschen | Rotes X rechts hinter der Zeile. `⌘Z` holt sie zurück. |
 | Alles kopieren | „Alles kopieren" unten kopiert den ganzen Text. |
 | Rückgängig | `⌘Z` oder `⌃Z`, wiederholen mit `⌘⇧Z` oder `⌃⇧Z`. Gilt auch für „Leeren". |
 | Leeren | „Leeren" unten rechts löscht alles. Ein `⌘Z` holt den Text zurück. |

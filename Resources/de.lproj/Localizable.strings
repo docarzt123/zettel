@@ -7,6 +7,7 @@
 "copyline" = "Zeile kopieren";
 "copied" = "Kopiert ✓";
 "resize.tooltip" = "Ziehen, um die Größe zu ändern";
+"deleteline" = "Zeile löschen (⌘Z holt sie zurück)";
 "saveas" = "Speichern unter …";
 "saveas.title" = "Zettel als Kopie speichern";
 "menu.open" = "Zettel öffnen\t⌃⌥Y";

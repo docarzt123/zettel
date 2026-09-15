@@ -1,5 +1,5 @@
 // Der Inhalt des Popovers bzw. des angepinnten Fensters: ein Textfeld mit
-// einem Kopieren-Knopf vor jeder Zeile, darunter eine schmale Leiste mit
+// einem Kopieren-Knopf vor und einem roten Lösch-X hinter jeder Zeile, darunter eine schmale Leiste mit
 // Pin, Leeren, Alles kopieren, „Speichern unter …" und einem Griff zum
 // Größerziehen.
 import AppKit
@@ -30,6 +30,7 @@ final class ZettelViewController: NSViewController, NSTextViewDelegate {
     private var copyAllButton: NSButton!
     private var pendingExternalText: String?
     private var lineButtons: [NSButton] = []
+    private var deleteButtons: [NSButton] = []
     private let separators = LineSeparatorOverlay()
     private var lineRanges: [NSRange] = []
     private var layoutScheduled = false
@@ -165,7 +166,7 @@ final class ZettelViewController: NSViewController, NSTextViewDelegate {
         mouseMonitor = NSEvent.addLocalMonitorForEvents(matching: [.mouseMoved]) { [weak self] event in
             guard let self, event.window === self.textView.window else { return event }
             let p = self.textView.convert(event.locationInWindow, from: nil)
-            if self.lineButtons.contains(where: { !$0.isHidden && $0.frame.contains(p) }) {
+            if (self.lineButtons + self.deleteButtons).contains(where: { !$0.isHidden && $0.frame.contains(p) }) {
                 NSCursor.arrow.set()
                 return nil
             }
@@ -210,11 +211,14 @@ final class ZettelViewController: NSViewController, NSTextViewDelegate {
 
     // MARK: Zeilen-Kopierknöpfe
 
-    /// Hält links eine Spalte frei, damit der Text nicht unter den Knöpfen liegt.
+    /// Hält links (Kopieren) und rechts (Löschen) je eine Spalte frei,
+    /// damit der Text nicht unter den Knöpfen liegt.
     private func updateExclusion() {
         guard let container = textView.textContainer else { return }
-        let rect = NSRect(x: -10, y: 0, width: Self.gutterWidth + 10, height: 1_000_000)
-        container.exclusionPaths = [NSBezierPath(rect: rect)]
+        let w = textView.bounds.width - textView.textContainerInset.width * 2
+        let left = NSRect(x: -10, y: 0, width: Self.gutterWidth + 10, height: 1_000_000)
+        let right = NSRect(x: w - Self.gutterWidth, y: 0, width: Self.gutterWidth + 10, height: 1_000_000)
+        container.exclusionPaths = [NSBezierPath(rect: left), NSBezierPath(rect: right)]
     }
 
     @objc private func textViewFrameChanged() {
@@ -236,6 +240,7 @@ final class ZettelViewController: NSViewController, NSTextViewDelegate {
         layout.ensureLayout(for: container)
         let origin = textView.textContainerOrigin
         let x = textView.textContainerInset.width + 2
+        let xRight = textView.bounds.width - textView.textContainerInset.width - Self.gutterWidth + 4
 
         var ranges: [NSRange] = []
         var frames: [NSRect] = []
@@ -272,6 +277,16 @@ final class ZettelViewController: NSViewController, NSTextViewDelegate {
             textView.addSubview(b)
             lineButtons.append(b)
         }
+        while deleteButtons.count < frames.count {
+            let b = ArrowCursorButton(image: NSImage(systemSymbolName: "xmark.circle.fill", accessibilityDescription: L("deleteline"))!,
+                                      target: self, action: #selector(deleteLine(_:)))
+            b.isBordered = false
+            b.imageScaling = .scaleProportionallyDown
+            b.contentTintColor = .systemRed
+            b.toolTip = L("deleteline")
+            textView.addSubview(b)
+            deleteButtons.append(b)
+        }
         for (i, b) in lineButtons.enumerated() {
             if i < frames.count {
                 b.frame = frames[i]
@@ -281,14 +296,23 @@ final class ZettelViewController: NSViewController, NSTextViewDelegate {
                 b.isHidden = true
             }
         }
+        for (i, b) in deleteButtons.enumerated() {
+            if i < frames.count {
+                b.frame = NSRect(x: xRight, y: frames[i].minY, width: 22, height: 18)
+                b.tag = i
+                b.isHidden = false
+            } else {
+                b.isHidden = true
+            }
+        }
         lineRanges = ranges
         separators.frame = textView.bounds
         separators.leftX = textView.textContainerInset.width
-        separators.rightX = textView.bounds.width - textView.textContainerInset.width
+        separators.rightX = xRight + 22
         separators.lineBottoms = lineBottoms
         separators.needsDisplay = true
         // Neue Knopf-Positionen → Cursor-Bereiche neu berechnen (Pfeil statt Textcursor).
-        for b in lineButtons { b.updateTrackingAreas() }
+        for b in lineButtons + deleteButtons { b.updateTrackingAreas() }
     }
 
     @objc private func copyLine(_ sender: NSButton) {
@@ -296,6 +320,16 @@ final class ZettelViewController: NSViewController, NSTextViewDelegate {
         let line = (textView.string as NSString).substring(with: lineRanges[sender.tag])
         copyToPasteboard(line)
         flash(sender, symbol: "checkmark", restore: "doc.on.doc")
+    }
+
+    /// Löscht die Zeile samt Zeilenumbruch. Über den Undo-Stapel, ⌘Z holt sie zurück.
+    @objc private func deleteLine(_ sender: NSButton) {
+        guard sender.tag < lineRanges.count else { return }
+        let text = textView.string as NSString
+        let full = text.lineRange(for: lineRanges[sender.tag])
+        guard textView.shouldChangeText(in: full, replacementString: "") else { return }
+        textView.replaceCharacters(in: full, with: "")
+        textView.didChangeText()
     }
 
     @objc private func copyAll() {

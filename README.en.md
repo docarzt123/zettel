@@ -42,6 +42,7 @@ Requires macOS 13 (Ventura) or newer.
 | Pin | Pin icon at the bottom left. The field becomes a small window floating above all other apps, including full-screen ones. Click again to unpin. |
 | Resize | Drag the grip at the bottom right. The pinned window also resizes at any edge. The size is remembered. |
 | Copy a line | Copy icon to the left of the line. A brief checkmark, then the line is on the clipboard. |
+| Delete a line | Red X to the right of the line. `⌘Z` brings it back. |
 | Copy all | "Copy All" at the bottom copies the whole text. |
 | Undo | `⌘Z` or `⌃Z`, redo with `⌘⇧Z` or `⌃⇧Z`. Works for "Clear" too. |
 | Clear | "Clear" at the bottom right deletes everything. `⌘Z` brings the text back. |
