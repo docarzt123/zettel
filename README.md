@@ -41,7 +41,10 @@ Mindestens macOS 13 (Ventura).
 | Öffnen und schließen | Klick auf das Symbol in der Menüleiste oder `⌃⌥Y` (Control + Option + Y), von überall |
 | Schließen | Klick irgendwo anders hin, `Esc`, oder nochmal `⌃⌥Y` |
 | Anpinnen | Pin-Symbol unten links. Das Feld wird zu einem kleinen Fenster, das über allen anderen Apps schwebt, auch über Vollbild-Apps. Nochmal klicken hebt es auf. |
-| Größe ändern | Am Rand ziehen. Die Größe wird gemerkt, im Popover wie im angepinnten Fenster. |
+| Größe ändern | Am Griff rechts unten ziehen. Das angepinnte Fenster geht auch an jeder Kante. Die Größe wird gemerkt. |
+| Zeile kopieren | Kopieren-Symbol am Ende der Zeile. Kurz ein Haken, dann liegt die Zeile in der Zwischenablage. |
+| Alles kopieren | „Alles kopieren" unten kopiert den ganzen Text. |
+| Rückgängig | `⌘Z` oder `⌃Z`, wiederholen mit `⌘⇧Z` oder `⌃⇧Z`. Gilt auch für „Leeren". |
 | Leeren | „Leeren" unten rechts löscht alles. Ein `⌘Z` holt den Text zurück. |
 | Kopie speichern | „Speichern unter …" unten rechts. Der Inhalt bleibt im Zettel stehen, die Kopie ist eine eigene Datei. |
 | Rechtsklick auf das Symbol | Zettel öffnen · Datei im Finder zeigen · Bei Login starten · Über Zettel · Beenden |
@@ -66,7 +69,7 @@ Native Swift-App mit AppKit, ohne Xcode-Projekt und ohne Abhängigkeiten.
 |---|---|
 | `Sources/main.swift` | Startet die App als Menüleisten-Programm ohne Dock-Symbol |
 | `Sources/AppDelegate.swift` | Menüleisten-Symbol, Popover, angepinntes Fenster, Rechtsklick-Menü, Tastenkürzel, Autostart, Über-Dialog |
-| `Sources/ZettelViewController.swift` | Das Textfeld mit Pin-Knopf und „Speichern unter", Größe merken, externe Änderungen übernehmen |
+| `Sources/ZettelViewController.swift` | Das Textfeld mit Zeilen-Kopierknöpfen, Leiste (Pin, Leeren, Alles kopieren, Speichern unter), Größen-Griff, Größe merken, externe Änderungen übernehmen |
 | `Sources/NoteStore.swift` | Lesen und verzögertes atomares Schreiben der Textdatei, Überwachung von Datei und Ordner |
 | `Sources/HotKey.swift` | Globales Tastenkürzel über die Carbon-Hotkey-API (braucht keine Bedienungshilfen-Freigabe) |
 | `Sources/L10n.swift` | Kurzform für lokalisierte Texte |

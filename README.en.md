@@ -40,7 +40,10 @@ Requires macOS 13 (Ventura) or newer.
 | Open and close | Click the menu bar icon or press `⌃⌥Y` (Control + Option + Y) from anywhere |
 | Close | Click anywhere else, press `Esc`, or press `⌃⌥Y` again |
 | Pin | Pin icon at the bottom left. The field becomes a small window floating above all other apps, including full-screen ones. Click again to unpin. |
-| Resize | Drag the edge. The size is remembered, both for the popover and the pinned window. |
+| Resize | Drag the grip at the bottom right. The pinned window also resizes at any edge. The size is remembered. |
+| Copy a line | Copy icon at the end of the line. A brief checkmark, then the line is on the clipboard. |
+| Copy all | "Copy All" at the bottom copies the whole text. |
+| Undo | `⌘Z` or `⌃Z`, redo with `⌘⇧Z` or `⌃⇧Z`. Works for "Clear" too. |
 | Clear | "Clear" at the bottom right deletes everything. `⌘Z` brings the text back. |
 | Save a copy | "Save As…" at the bottom right. The text stays in Zettel, the copy is a separate file. |
 | Right-click the icon | Open Zettel · Show File in Finder · Launch at Login · About Zettel · Quit |
@@ -65,7 +68,7 @@ Native Swift app using AppKit, no Xcode project, no dependencies.
 |---|---|
 | `Sources/main.swift` | Starts the app as a menu bar program without a Dock icon |
 | `Sources/AppDelegate.swift` | Menu bar icon, popover, pinned window, context menu, hotkey, launch at login, About dialog |
-| `Sources/ZettelViewController.swift` | The text field with pin button and "Save As", size memory, applying external changes |
+| `Sources/ZettelViewController.swift` | The text field with per-line copy buttons, bottom bar (pin, clear, copy all, save as), resize grip, size memory, applying external changes |
 | `Sources/NoteStore.swift` | Reading and debounced atomic writing of the text file, watching the file and its folder |
 | `Sources/HotKey.swift` | Global hotkey via the Carbon hotkey API (needs no Accessibility permission) |
 | `Sources/L10n.swift` | Shorthand for localized strings |

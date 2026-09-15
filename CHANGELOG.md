@@ -37,6 +37,12 @@ Deutsch zuerst, English below each entry.
   "Save As…" exports a copy as a text file.
 - „Leeren" löscht den ganzen Text, ⌘Z holt ihn zurück.
   "Clear" deletes all text, ⌘Z brings it back.
+- Kopieren-Knopf am Ende jeder Zeile, „Alles kopieren" in der Leiste unten.
+  Copy button at the end of every line, "Copy All" in the bottom bar.
+- Griff rechts unten zum Größerziehen, auch im Popover. Größe wird gemerkt.
+  Resize grip at the bottom right, works in the popover too. Size is remembered.
+- Rückgängig und Wiederholen auch mit ⌃Z und ⌃⇧Z.
+  Undo and redo also via ⌃Z and ⌃⇧Z.
 - Rechtsklick-Menü: Öffnen, Datei im Finder zeigen, Bei Login starten,
   Über Zettel, Beenden.
   Context menu: Open, Show File in Finder, Launch at Login, About, Quit.

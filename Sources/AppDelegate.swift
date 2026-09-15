@@ -87,6 +87,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate, NSW
         edit.addItem(withTitle: "Undo", action: Selector(("undo:")), keyEquivalent: "z")
         let redo = edit.addItem(withTitle: "Redo", action: Selector(("redo:")), keyEquivalent: "z")
         redo.keyEquivalentModifierMask = [.command, .shift]
+        // Zusätzlich ⌃Z / ⌃⇧Z, weil Windows-Gewohnheit (Marc, 15.09.2026).
+        let undoCtrl = edit.addItem(withTitle: "Undo", action: Selector(("undo:")), keyEquivalent: "z")
+        undoCtrl.keyEquivalentModifierMask = [.control]
+        undoCtrl.isAlternate = true
+        let redoCtrl = edit.addItem(withTitle: "Redo", action: Selector(("redo:")), keyEquivalent: "z")
+        redoCtrl.keyEquivalentModifierMask = [.control, .shift]
+        redoCtrl.isAlternate = true
         edit.addItem(.separator())
         edit.addItem(withTitle: "Cut", action: #selector(NSText.cut(_:)), keyEquivalent: "x")
         edit.addItem(withTitle: "Copy", action: #selector(NSText.copy(_:)), keyEquivalent: "c")
@@ -228,6 +235,18 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate, NSW
             showPanel(at: currentContentRect())
         } else {
             showPopover()
+        }
+    }
+
+    func zettelResize(to size: NSSize) {
+        if let popover, popover.isShown {
+            popover.contentSize = size
+        } else if let panel {
+            // Oben links festhalten, nach rechts unten wachsen.
+            var frame = panel.frameRect(forContentRect: NSRect(origin: .zero, size: size))
+            frame.origin.x = panel.frame.minX
+            frame.origin.y = panel.frame.maxY - frame.height
+            panel.setFrame(frame, display: true)
         }
     }
 

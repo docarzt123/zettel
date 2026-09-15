@@ -2,6 +2,11 @@
 "pin.tooltip" = "Anpinnen: als schwebendes Fenster offen halten";
 "clear" = "Leeren";
 "clear.tooltip" = "Alles löschen (⌘Z macht es rückgängig)";
+"copyall" = "Alles kopieren";
+"copyall.tooltip" = "Gesamten Text in die Zwischenablage";
+"copyline" = "Zeile kopieren";
+"copied" = "Kopiert ✓";
+"resize.tooltip" = "Ziehen, um die Größe zu ändern";
 "saveas" = "Speichern unter …";
 "saveas.title" = "Zettel als Kopie speichern";
 "menu.open" = "Zettel öffnen\t⌃⌥Y";

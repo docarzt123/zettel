@@ -2,6 +2,11 @@
 "pin.tooltip" = "Pin: keep open as a floating window";
 "clear" = "Clear";
 "clear.tooltip" = "Delete everything (⌘Z brings it back)";
+"copyall" = "Copy All";
+"copyall.tooltip" = "Copy the whole text to the clipboard";
+"copyline" = "Copy line";
+"copied" = "Copied ✓";
+"resize.tooltip" = "Drag to resize";
 "saveas" = "Save As…";
 "saveas.title" = "Save a copy of the note";
 "menu.open" = "Open Zettel\t⌃⌥Y";
