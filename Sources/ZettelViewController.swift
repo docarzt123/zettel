@@ -30,6 +30,7 @@ final class ZettelViewController: NSViewController, NSTextViewDelegate {
     private var copyAllButton: NSButton!
     private var pendingExternalText: String?
     private var lineButtons: [NSButton] = []
+    private let separators = LineSeparatorOverlay()
     private var lineRanges: [NSRange] = []
     private var layoutScheduled = false
 
@@ -91,6 +92,8 @@ final class ZettelViewController: NSViewController, NSTextViewDelegate {
         tv.delegate = self
         tv.postsFrameChangedNotifications = true
         textView = tv
+        separators.autoresizingMask = [.width, .height]
+        tv.addSubview(separators)
         NotificationCenter.default.addObserver(self, selector: #selector(textViewFrameChanged),
                                                name: NSView.frameDidChangeNotification, object: tv)
 
@@ -218,6 +221,7 @@ final class ZettelViewController: NSViewController, NSTextViewDelegate {
 
         var ranges: [NSRange] = []
         var frames: [NSRect] = []
+        var lineBottoms: [CGFloat] = []
         var pos = 0
         while pos < text.length {
             let lineRange = text.lineRange(for: NSRange(location: pos, length: 0))
@@ -233,6 +237,9 @@ final class ZettelViewController: NSViewController, NSTextViewDelegate {
                 let y = frag.minY + origin.y + (frag.height - 18) / 2
                 ranges.append(content)
                 frames.append(NSRect(x: x, y: y, width: 22, height: 18))
+                let lastGlyph = layout.glyphIndexForCharacter(at: NSMaxRange(content) - 1)
+                let lastFrag = layout.lineFragmentRect(forGlyphAt: lastGlyph, effectiveRange: nil)
+                lineBottoms.append(lastFrag.maxY + origin.y + 1)
             }
             pos = NSMaxRange(lineRange)
         }
@@ -257,6 +264,11 @@ final class ZettelViewController: NSViewController, NSTextViewDelegate {
             }
         }
         lineRanges = ranges
+        separators.frame = textView.bounds
+        separators.leftX = textView.textContainerInset.width
+        separators.rightX = x + 22
+        separators.lineBottoms = lineBottoms
+        separators.needsDisplay = true
     }
 
     @objc private func copyLine(_ sender: NSButton) {
@@ -381,6 +393,28 @@ final class ZettelViewController: NSViewController, NSTextViewDelegate {
                 alert.runModal()
             }
         }
+    }
+}
+
+/// Ganz schwache Trennlinien unter jeder Zeile, damit man sieht, welcher
+/// Kopierknopf zu welcher Zeile gehört. Lässt Klicks durch.
+final class LineSeparatorOverlay: NSView {
+    var lineBottoms: [CGFloat] = []
+    var leftX: CGFloat = 0
+    var rightX: CGFloat = 0
+
+    override func hitTest(_ point: NSPoint) -> NSView? { nil }
+    override var isFlipped: Bool { true }
+
+    override func draw(_ dirtyRect: NSRect) {
+        NSColor.separatorColor.withAlphaComponent(0.35).setStroke()
+        let path = NSBezierPath()
+        path.lineWidth = 1
+        for y in lineBottoms {
+            path.move(to: NSPoint(x: leftX, y: y + 0.5))
+            path.line(to: NSPoint(x: rightX, y: y + 0.5))
+        }
+        path.stroke()
     }
 }
 
