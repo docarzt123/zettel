@@ -37,9 +37,9 @@ Deutsch zuerst, English below each entry.
   "Save As…" exports a copy as a text file.
 - „Leeren" löscht den ganzen Text, ⌘Z holt ihn zurück.
   "Clear" deletes all text, ⌘Z brings it back.
-- Kopieren-Knopf am Ende jeder Zeile, „Alles kopieren" in der Leiste unten.
+- Kopieren-Knopf vor jeder Zeile, „Alles kopieren" in der Leiste unten.
   Ganz schwache Trennlinien unter den Zeilen zeigen, welcher Knopf wohin gehört.
-  Copy button at the end of every line, "Copy All" in the bottom bar. Very
+  Copy button in front of every line, "Copy All" in the bottom bar. Very
   faint separator lines under the lines show which button belongs where.
 - Griff rechts unten zum Größerziehen, auch im Popover. Größe wird gemerkt.
   Resize grip at the bottom right, works in the popover too. Size is remembered.

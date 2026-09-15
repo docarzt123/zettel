@@ -1,5 +1,5 @@
 // Der Inhalt des Popovers bzw. des angepinnten Fensters: ein Textfeld mit
-// einem Kopieren-Knopf am Ende jeder Zeile, darunter eine schmale Leiste mit
+// einem Kopieren-Knopf vor jeder Zeile, darunter eine schmale Leiste mit
 // Pin, Leeren, Alles kopieren, „Speichern unter …" und einem Griff zum
 // Größerziehen.
 import AppKit
@@ -20,7 +20,7 @@ final class ZettelViewController: NSViewController, NSTextViewDelegate {
     static let minSize = NSSize(width: 380, height: 180)
     static let defaultSize = NSSize(width: 460, height: 300)
     private static let sizeKey = "contentSize"
-    /// Breite der Spalte rechts, in der die Zeilen-Kopierknöpfe sitzen.
+    /// Breite der Spalte links, in der die Zeilen-Kopierknöpfe sitzen.
     private static let gutterWidth: CGFloat = 30
 
     let store: NoteStore
@@ -191,11 +191,10 @@ final class ZettelViewController: NSViewController, NSTextViewDelegate {
 
     // MARK: Zeilen-Kopierknöpfe
 
-    /// Hält rechts eine Spalte frei, damit der Text nicht unter den Knöpfen liegt.
+    /// Hält links eine Spalte frei, damit der Text nicht unter den Knöpfen liegt.
     private func updateExclusion() {
         guard let container = textView.textContainer else { return }
-        let w = textView.bounds.width - textView.textContainerInset.width * 2
-        let rect = NSRect(x: w - Self.gutterWidth, y: 0, width: Self.gutterWidth + 10, height: 1_000_000)
+        let rect = NSRect(x: -10, y: 0, width: Self.gutterWidth + 10, height: 1_000_000)
         container.exclusionPaths = [NSBezierPath(rect: rect)]
     }
 
@@ -217,7 +216,7 @@ final class ZettelViewController: NSViewController, NSTextViewDelegate {
         let text = textView.string as NSString
         layout.ensureLayout(for: container)
         let origin = textView.textContainerOrigin
-        let x = textView.bounds.width - textView.textContainerInset.width - Self.gutterWidth + 4
+        let x = textView.textContainerInset.width + 2
 
         var ranges: [NSRange] = []
         var frames: [NSRect] = []
@@ -266,7 +265,7 @@ final class ZettelViewController: NSViewController, NSTextViewDelegate {
         lineRanges = ranges
         separators.frame = textView.bounds
         separators.leftX = textView.textContainerInset.width
-        separators.rightX = x + 22
+        separators.rightX = textView.bounds.width - textView.textContainerInset.width
         separators.lineBottoms = lineBottoms
         separators.needsDisplay = true
     }
@@ -407,7 +406,7 @@ final class LineSeparatorOverlay: NSView {
     override var isFlipped: Bool { true }
 
     override func draw(_ dirtyRect: NSRect) {
-        NSColor.separatorColor.withAlphaComponent(0.35).setStroke()
+        NSColor.labelColor.withAlphaComponent(0.06).setStroke()
         let path = NSBezierPath()
         path.lineWidth = 1
         for y in lineBottoms {
