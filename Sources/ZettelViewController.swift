@@ -269,7 +269,7 @@ final class ZettelViewController: NSViewController, NSTextViewDelegate {
         separators.lineBottoms = lineBottoms
         separators.needsDisplay = true
         // Neue Knopf-Positionen → Cursor-Bereiche neu berechnen (Pfeil statt Textcursor).
-        for b in lineButtons { textView.window?.invalidateCursorRects(for: b) }
+        for b in lineButtons { b.updateTrackingAreas() }
     }
 
     @objc private func copyLine(_ sender: NSButton) {
@@ -398,10 +398,26 @@ final class ZettelViewController: NSViewController, NSTextViewDelegate {
 }
 
 /// Knopf im Textfeld: zeigt den Pfeil statt des Text-Cursors des NSTextView.
+/// Cursor-Rects reichen dafür nicht, weil NSTextView den Cursor bei jeder
+/// Mausbewegung selbst setzt. Deshalb eine eigene Tracking-Area, die bei
+/// Betreten und jeder Bewegung darüber den Pfeil erzwingt.
 final class ArrowCursorButton: NSButton {
-    override func resetCursorRects() {
-        addCursorRect(bounds, cursor: .arrow)
+    private var tracking: NSTrackingArea?
+
+    override func updateTrackingAreas() {
+        super.updateTrackingAreas()
+        if let tracking { removeTrackingArea(tracking) }
+        let t = NSTrackingArea(rect: bounds,
+                               options: [.mouseEnteredAndExited, .mouseMoved, .cursorUpdate, .activeAlways],
+                               owner: self, userInfo: nil)
+        addTrackingArea(t)
+        tracking = t
     }
+
+    override func cursorUpdate(with event: NSEvent) { NSCursor.arrow.set() }
+    override func mouseEntered(with event: NSEvent) { NSCursor.arrow.set() }
+    override func mouseMoved(with event: NSEvent) { NSCursor.arrow.set() }
+    override func mouseExited(with event: NSEvent) { NSCursor.iBeam.set() }
 }
 
 /// Ganz schwache Trennlinien unter jeder Zeile, damit man sieht, welcher
