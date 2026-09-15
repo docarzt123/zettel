@@ -244,8 +244,8 @@ final class ZettelViewController: NSViewController, NSTextViewDelegate {
         }
 
         while lineButtons.count < frames.count {
-            let b = NSButton(image: NSImage(systemSymbolName: "doc.on.doc", accessibilityDescription: L("copyline"))!,
-                             target: self, action: #selector(copyLine(_:)))
+            let b = ArrowCursorButton(image: NSImage(systemSymbolName: "doc.on.doc", accessibilityDescription: L("copyline"))!,
+                                      target: self, action: #selector(copyLine(_:)))
             b.isBordered = false
             b.imageScaling = .scaleProportionallyDown
             b.contentTintColor = .tertiaryLabelColor
@@ -268,6 +268,8 @@ final class ZettelViewController: NSViewController, NSTextViewDelegate {
         separators.rightX = textView.bounds.width - textView.textContainerInset.width
         separators.lineBottoms = lineBottoms
         separators.needsDisplay = true
+        // Neue Knopf-Positionen → Cursor-Bereiche neu berechnen (Pfeil statt Textcursor).
+        for b in lineButtons { textView.window?.invalidateCursorRects(for: b) }
     }
 
     @objc private func copyLine(_ sender: NSButton) {
@@ -392,6 +394,13 @@ final class ZettelViewController: NSViewController, NSTextViewDelegate {
                 alert.runModal()
             }
         }
+    }
+}
+
+/// Knopf im Textfeld: zeigt den Pfeil statt des Text-Cursors des NSTextView.
+final class ArrowCursorButton: NSButton {
+    override func resetCursorRects() {
+        addCursorRect(bounds, cursor: .arrow)
     }
 }
 
